@@ -1,5 +1,5 @@
 ---
-title: "multicollinearity"
+title: "Multicollinearity"
 output: html_document
 ---
 
@@ -7,7 +7,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Multicollinearity
 
 ## Longley
 
@@ -29,25 +28,35 @@ df <- longley
 str(df)
 ```
 
+```{r}
+#ggpairs(df)
+```
 
 
 
 ```{r}
-
 #now fitting a linear model
-model <- lm(Employed ~ GNP + Unemployed + Armed.Forces + Population + Year, data = df)
-vif(model)
+model1 <- lm(Employed ~ GNP + Unemployed + Armed.Forces + Population + Year, data = df)
+vif(model1)
 ```
 
-```{r}
 
-```
 ```{r}
 #now fitting a linear model again
-model2 <- lm(Employed ~ Unemployed + Armed.Forces + Year, data = df)
+model2 <- lm(Employed ~ Unemployed + Armed.Forces +Population + Year, data = df)
 
 vif(model2)
 ```
+```{r}
+
+#now fitting a linear model again
+model3 <- lm(Employed ~ Unemployed + Armed.Forces +Population, data = df)
+
+vif(model3)
+
+```
+
+
 
 ## Blood Pressure
 
