@@ -7,11 +7,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Multicollinearity
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Longley
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r cars}
 library(datasets)
@@ -22,6 +21,7 @@ library(GGally)
 library(car)
 library(gridExtra)
 library(knitr)
+library(corrplot)
 ```
 
 ```{r}
@@ -48,4 +48,67 @@ model2 <- lm(Employed ~ Unemployed + Armed.Forces + Year, data = df)
 
 vif(model2)
 ```
+
+## Blood Pressure
+
+```{r}
+bloodpress <- read.table("bloodpress.txt", header=T)
+```
+
+
+```{r}
+str(bloodpress)
+```
+
+```{r}
+cor(bloodpress)
+```
+
+```{r}
+corrplot(cor(bloodpress), type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+```{r}
+
+model.1 <- lm(BP ~ Age + Weight + BSA + Dur + Pulse + Stress, data = bloodpress)
+car::vif(model.1)
+```
+
+```{r}
+
+
+model.2 <- lm(BP ~ Age +  BSA + Dur + Pulse + Stress, data = bloodpress)
+car::vif(model.2)
+
+```
+
+
+```{r}
+head(bloodpress)
+
+```
+
+```{r}
+#plot(bloodpress[, -1])
+corrplot(cor(bloodpress[, -1]), method = "number", type = "upper", diag = FALSE)
+```
+
+```{r}
+summary(bloodpress.lm <- lm(BP ~ . - Pt, data = bloodpress))
+
+```
+
+```{r}
+round(vif(bloodpress.lm),2)
+```
+
+```{r}
+summary(bloodpress.lm2 <- lm(BP ~ . - Pt - BSA, data = bloodpress))
+```
+
+```{r}
+round(vif(bloodpress.lm2),2)
+```
+
 
